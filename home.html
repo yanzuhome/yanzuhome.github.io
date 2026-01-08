@@ -1,0 +1,482 @@
+
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>彦祖之家</title>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding-bottom: 60px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        /* 通用板块样式 */
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 15px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            color: #3b82f6;
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        /* 顶部介绍 */
+        .top-nav {
+            background: linear-gradient(to right, #1e40af, #3b82f6);
+            color: white;
+            padding: 18px 15px;
+            border-radius: 16px;
+            margin: 15px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .top-nav h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .top-nav p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        /* 汇率板块 */
+        .rate-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .rate-title {
+            font-size: 14px;
+            color: #64748b;
+        }
+        .rate-value {
+            font-size: 18px;
+            font-weight: 600;
+            color: #3b82f6;
+        }
+        .refresh-btn {
+            background: none;
+            border: 1px solid #dbeafe;
+            color: #3b82f6;
+            border-radius: 15px;
+            padding: 3px 10px;
+            font-size: 12px;
+            margin-left: auto;
+            cursor: pointer;
+        }
+        /* 用户评价轮播 */
+        .reviews-wrapper {
+            overflow: hidden;
+            position: relative;
+            height: 160px;
+        }
+        .reviews-list {
+            display: flex;
+            position: absolute;
+            width: 100%;
+            transition: transform 0.5s ease;
+        }
+        .review-item {
+            min-width: 100%;
+            padding: 0 10px;
+        }
+        .review-card {
+            background: #eff6ff;
+            border-radius: 10px;
+            padding: 15px;
+            height: 100%;
+        }
+        .review-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 10px;
+        }
+        .review-avatar {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background-color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+        .review-avatar img {
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+        }
+        .review-author {
+            font-size: 14px;
+            font-weight: 500;
+            color: #1e293b;
+        }
+        .review-content {
+            font-size: 13px;
+            color: #334155;
+            line-height: 1.5;
+        }
+        /* 统计信息 */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+        .stat-item {
+            text-align: center;
+            padding: 10px 0;
+        }
+        .stat-number {
+            font-size: 18px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+        .stat-label {
+            font-size: 12px;
+            color: #94a3b8;
+        }
+        /* 背书部分 */
+        .endorsement-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 15px;
+        }
+        .endorsement-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 8px;
+        }
+        .endorsement-icon {
+            width: 50px;
+            height: 50px;
+            background-color: #eff6ff;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3b82f6;
+            font-size: 22px;
+        }
+        .endorsement-text {
+            font-size: 12px;
+            color: #64748b;
+            text-align: center;
+        }
+        /* 底部tab栏 */
+        .bottom-tab {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 11px;
+            gap: 3px;
+        }
+        .tab-item.active {
+            color: #3b82f6;
+        }
+        .tab-icon {
+            font-size: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部介绍 -->
+        <div class="top-nav">
+            <h1>彦祖之家</h1>
+            <p>安全可靠的综合服务平台</p>
+        </div>
+
+
+
+
+<!-- 联系客服板块 -->
+<div class="section">
+    <div class="contact客服">
+        <div class="contact-info">
+            <span class="contact-title">需要帮助？</span>
+            <button class="contact-btn" onclick="window.location.href='http://t.me/huafeiXL_Bot'">
+                <i class="fa fa-headphones"></i> 联系客服
+            </button>
+        </div>
+    </div>
+</div>
+
+<style>
+    .contact客服 {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 12px 0;
+    }
+    .contact-title {
+        font-size: 14px;
+        color: #64748b;
+    }
+    .contact-btn {
+        background-color: #3b82f6;
+        color: white;
+        border: none;
+        border-radius: 20px;
+        padding: 6px 15px;
+        font-size: 13px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        cursor: pointer;
+    }
+    .contact-btn:hover {
+        background-color: #2563eb;
+    }
+</style>
+
+
+
+
+
+        <!-- USDT汇率板块 -->
+        <div class="section">
+            <h3 class="section-title">
+                <i class="fa fa-line-chart"></i>USDT实时汇率
+            </h3>
+            <div class="rate-info">
+                <span class="rate-title">1 USDT =</span>
+                <span id="rate-value" class="rate-value">加载中...</span>
+                <button class="refresh-btn" onclick="fetchRate()">
+                    <i class="fa fa-refresh"></i> 刷新
+                </button>
+            </div>
+        </div>
+
+        <!-- 用户评价板块 -->
+        <div class="section">
+            <h3 class="section-title">
+                <i class="fa fa-comments"></i>用户评价
+            </h3>
+            <div class="reviews-wrapper">
+                <div class="reviews-list" id="reviewsList">
+                    <!-- 评价1 -->
+                    <div class="review-item">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">
+                                    <img src="https://via.placeholder.com/30?text=U1" alt="用户头像">
+                                </div>
+                                <div class="review-author">李先生</div>
+                            </div>
+                            <div class="review-content">
+                                平台操作很简单，缴费到账速度快，每次充值都很放心，推荐大家使用。
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 评价2 -->
+                    <div class="review-item">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">
+                                    <img src="https://via.placeholder.com/30?text=U2" alt="用户头像">
+                                </div>
+                                <div class="review-author">张女士</div>
+                            </div>
+                            <div class="review-content">
+                                用了半年多了，从没出过问题，客服态度也很好，有问必答很耐心。
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 评价3 -->
+                    <div class="review-item">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">
+                                    <img src="https://via.placeholder.com/30?text=U3" alt="用户头像">
+                                </div>
+                                <div class="review-author">王先生</div>
+                            </div>
+                            <div class="review-content">
+                                费率透明，没有隐藏收费，比其他平台划算，会一直用下去。
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 评价4 -->
+                    <div class="review-item">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">
+                                    <img src="https://via.placeholder.com/30?text=U4" alt="用户头像">
+                                </div>
+                                <div class="review-author">赵女士</div>
+                            </div>
+                            <div class="review-content">
+                                水电燃气缴费都能搞定，一站式服务太方便了，省了好多时间。
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 评价5 -->
+                    <div class="review-item">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">
+                                    <img src="https://via.placeholder.com/30?text=U5" alt="用户头像">
+                                </div>
+                                <div class="review-author">陈先生</div>
+                            </div>
+                            <div class="review-content">
+                                界面简洁清晰，老年人也能轻松操作，给爸妈也装了一个。
+                            </div>
+                        </div>
+                    </div>
+                    <!-- 评价6 -->
+                    <div class="review-item">
+                        <div class="review-card">
+                            <div class="review-header">
+                                <div class="review-avatar">
+                                    <img src="https://via.placeholder.com/30?text=U6" alt="用户头像">
+                                </div>
+                                <div class="review-author">刘女士</div>
+                            </div>
+                            <div class="review-content">
+                                充值后到账有提醒，很贴心，安全措施做得很到位，值得信赖。
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 统计信息板块 -->
+        <div class="section">
+            <h3 class="section-title">
+                <i class="fa fa-bar-chart"></i>平台数据
+            </h3>
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <div class="stat-number">2,580,000+</div>
+                    <div class="stat-label">累计用户</div>
+                </div>
+                <div class="stat-item">
+                    <div class="stat-number">1860天</div>
+                    <div class="stat-label">稳定运行</div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 背书板块 -->
+        <div class="section">
+            <h3 class="section-title">
+                <i class="fa fa-shield"></i>服务保障
+            </h3>
+            <div class="endorsement-grid">
+                <div class="endorsement-item">
+                    <div class="endorsement-icon">
+                        <i class="fa fa-database"></i>
+                    </div>
+                    <div class="endorsement-text">银行级数据加密</div>
+                </div>
+                <div class="endorsement-item">
+                    <div class="endorsement-icon">
+                        <i class="fa fa-lock"></i>
+                    </div>
+                    <div class="endorsement-text">多重安全验证</div>
+                </div>
+                <div class="endorsement-item">
+                    <div class="endorsement-icon">
+                        <i class="fa fa-credit-card"></i>
+                    </div>
+                    <div class="endorsement-text">合规支付通道</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- 底部tab栏 -->
+    <div class="bottom-tab">
+        <a href="index.html" class="tab-item">
+            <i class="fa fa-home tab-icon"></i>
+            <span>生活缴费</span>
+        </a>
+        <a href="pianshugb.html" class="tab-item">
+            <i class="fa fa-shield tab-icon"></i>
+            <span>骗术公布</span>
+        </a>
+        <a href="ruanjianxz.html" class="tab-item">
+            <i class="fa fa-download tab-icon"></i>
+            <span>软件下载</span>
+        </a>
+        <a href="home.html" class="tab-item active">
+            <i class="fa fa-user tab-icon"></i>
+            <span>彦祖之家</span>
+        </a>
+    </div>
+
+    <script>
+        // 获取USDT汇率
+        function fetchRate() {
+            const rateElem = document.getElementById('rate-value');
+            rateElem.textContent = '加载中...';
+            
+            fetch('https://api.coingecko.com/api/v3/simple/price?ids=tether&vs_currencies=cny')
+                .then(res => res.json())
+                .then(data => {
+                    const rate = data.tether.cny;
+                    rateElem.textContent = `¥${rate.toFixed(2)}`;
+                })
+                .catch(() => {
+                    rateElem.textContent = '获取失败';
+                });
+        }
+        // 初始化汇率
+        fetchRate();
+
+        // 评价轮播
+        let currentReview = 0;
+        const reviewsList = document.getElementById('reviewsList');
+        const totalReviews = document.querySelectorAll('.review-item').length;
+
+        function scrollReviews() {
+            currentReview = (currentReview + 1) % totalReviews;
+            const scrollPos = -currentReview * 100;
+            reviewsList.style.transform = `translateX(${scrollPos}%)`;
+        }
+
+        // 每5秒切换一次评价
+        setInterval(scrollReviews, 5000);
+    </script>
+</body>
+</html>
