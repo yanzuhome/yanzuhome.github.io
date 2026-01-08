@@ -1,0 +1,347 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>彦祖之家 - 生活缴费</title>
+    <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+        }
+        body {
+            background-color: #f5f7fa;
+            padding-bottom: 60px;
+        }
+        .container {
+            max-width: 400px;
+            margin: 0 auto;
+            padding: 0 15px;
+        }
+        /* 通用板块样式 *
+        .section {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            margin-bottom: 15px;
+        }
+        .section-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+        }
+        .section-title i {
+            color: #3b82f6;
+            margin-right: 8px;
+            font-size: 18px;
+        }
+        /* 顶部导航 */
+        .top-nav {
+            background: linear-gradient(to right, #1e40af, #3b82f6);
+            color: white;
+            padding: 18px 15px;
+            border-radius: 16px;
+            margin: 15px 0;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+        }
+        .top-nav h1 {
+            font-size: 18px;
+            font-weight: 600;
+        }
+        .top-nav p {
+            font-size: 14px;
+            opacity: 0.9;
+            margin-top: 5px;
+        }
+        /* 通知公告板块 */
+        .notice-list {
+            list-style: none;
+        }
+        .notice-item {
+            padding: 10px 0;
+            border-bottom: 1px solid #f1f5f9;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .notice-item:last-child {
+            border-bottom: none;
+        }
+        .notice-item a {
+            color: #334155;
+            font-size: 14px;
+            text-decoration: none;
+            display: -webkit-box;
+            -webkit-line-clamp: 1;
+            -webkit-box-orient: vertical;
+            overflow: hidden;
+            flex: 1;
+        }
+        .notice-time {
+            font-size: 12px;
+            color: #94a3b8;
+            margin-left: 10px;
+            white-space: nowrap;
+        }
+                
+        /* 商品列表（四行，一行一个） */
+        .product-list {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            margin-top: 15px;
+        }
+        .product-card {
+            background: white;
+            border-radius: 12px;
+            padding: 15px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+        .product-img {
+            width: 80px;
+            height: 80px;
+            border-radius: 8px;
+            object-fit: cover;
+            background-color: #eff6ff;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: #3b82f6;
+            font-size: 24px;
+        }
+        .product-info {
+            flex: 1;
+        }
+        .product-tags {
+            display: flex;
+            gap: 6px;
+            margin-bottom: 8px;
+        }
+        .tag {
+            font-size: 10px;
+            padding: 2px 8px;
+            border-radius: 12px;
+        }
+        .tag-hot {
+            background-color: #fee2e2;
+            color: #dc2626;
+        }
+        .tag-fast {
+            background-color: #dcfce7;
+            color: #16a34a;
+        }
+        .tag-safe {
+            background-color: #dbeafe;
+            color: #2563eb;
+        }
+        .tag-all {
+            background-color: #f5f5f4;
+            color: #57534e;
+        }
+        .product-title {
+            font-size: 16px;
+            font-weight: 600;
+            color: #1e293b;
+            margin-bottom: 5px;
+        }
+        .product-desc {
+            font-size: 12px;
+            color: #64748b;
+            margin-bottom: 8px;
+        }
+        .product-price {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        .price-current {
+            font-size: 15px;
+            font-weight: 700;
+            color: #3b82f6;
+        }
+        .price-original {
+            font-size: 12px;
+            color: #94a3b8;
+            text-decoration: line-through;
+        }
+        .buy-btn {
+            background-color: #3b82f6;
+            color: white;
+            border: none;
+            border-radius: 20px;
+            padding: 6px 15px;
+            font-size: 13px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: background-color 0.2s;
+        }
+        .buy-btn:hover {
+            background-color: #2563eb;
+        }
+        /* 底部tab栏 */
+        .bottom-tab {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background-color: white;
+            display: flex;
+            justify-content: space-around;
+            padding: 10px 0;
+            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+        }
+        .tab-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #94a3b8;
+            text-decoration: none;
+            font-size: 11px;
+            gap: 3px;
+        }
+        .tab-item.active {
+            color: #3b82f6;
+        }
+        .tab-icon {
+            font-size: 20px;
+        }
+        /* 加载状态 */
+        .loading {
+            color: #94a3b8;
+            font-size: 14px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- 顶部介绍 -->
+        <div class="top-nav">
+            <h1>生活缴费服务</h1>
+            <p>安全便捷的水电燃气费缴纳，支持多渠道支付</p>
+        </div>
+        <!-- 通知公告板块 -->
+        <div class="section">
+            <h3 class="section-title">
+                <i class="fa fa-bullhorn"></i>通知公告
+            </h3>
+            <ul class="notice-list">
+                <li class="notice-item">
+                    <a href="#">燃气费充值到账时间调整通知（2023年10月）</a>
+                    <span class="notice-time">10-01</span>
+                </li>
+                <li class="notice-item">
+                    <a href="#">国庆节期间缴费服务安排公告</a>
+                    <span class="notice-time">09-28</span>
+                </li>                          
+            </ul>
+        </div>
+        <!-- 商品列表（四行，一行一个） -->
+        <div class="product-list">
+            <!-- 商品1 -->
+            <div class="product-card">
+                <div class="product-img">
+                    <i class="fa fa-bolt"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-tags">
+                        <span class="tag tag-hot">热门</span>
+                        <span class="tag tag-safe">安全</span>
+                    </div>
+                    <h3 class="product-title">全国电费慢充</h3>
+                    <p class="product-desc">72小时到账，未到账全额退款，支持全国各地区</p>
+                    <div class="product-price">
+                        <span class="price-current">¥800</span>
+                        <span class="price-original">¥1000</span>
+                        <button class="buy-btn">立即充值</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 商品2 -->
+            <div class="product-card">
+                <div class="product-img">
+                    <i class="fa fa-tint"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-tags">
+                        <span class="tag tag-all">通用</span>
+                    </div>
+                    <h3 class="product-title">居民水费代缴</h3>
+                    <p class="product-desc">支持阶梯水价计算，含污水处理费，实时到账提醒</p>
+                    <div class="product-price">
+                        <span class="price-current">¥800</span>
+                        <span class="price-original">¥1000</span>
+                        <button class="buy-btn">立即充值</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 商品3 -->
+            <div class="product-card">
+                <div class="product-img">
+                    <i class="fa fa-fire"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-tags">
+                        <span class="tag tag-fast">快速</span>
+                        <span class="tag tag-hot">热门</span>
+                    </div>
+                    <h3 class="product-title">天然气充值</h3>
+                    <p class="product-desc">覆盖全国90%城市，24小时内到账，支持液化气</p>
+                    <div class="product-price">
+                        <span class="price-current">¥800</span>
+                        <span class="price-original">¥1000</span>
+                        <button class="buy-btn">立即充值</button>
+                    </div>
+                </div>
+            </div>
+            <!-- 商品4 -->
+            <div class="product-card">
+                <div class="product-img">
+                    <i class="fa fa-mobile"></i>
+                </div>
+                <div class="product-info">
+                    <div class="product-tags">
+                        <span class="tag tag-all">三网通用</span>
+                        <span class="tag tag-fast">秒到</span>
+                    </div>
+                    <h3 class="product-title">三网话费慢充</h3>
+                    <p class="product-desc">移动/联通/电信通用，充错可追回，支持大额充值</p>
+                    <div class="product-price">
+                        <span class="price-current">¥800</span>
+                        <span class="price-original">¥1000</span>
+                        <button class="buy-btn">立即充值</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- 底部tab栏 -->
+    <div class="bottom-tab">
+        <a href="index.html" class="tab-item active">
+            <i class="fa fa-home tab-icon"></i>
+            <span>生活缴费</span>
+        </a>
+        <a href="pianshugb.html" class="tab-item">
+            <i class="fa fa-shield tab-icon"></i>
+            <span>骗术公布</span>
+        </a>
+        <a href="ruanjianxz.html" class="tab-item">
+            <i class="fa fa-download tab-icon"></i>
+            <span>软件下载</span>
+        </a>
+        <a href="home.html" class="tab-item">
+            <i class="fa fa-user tab-icon"></i>
+            <span>彦祖之家</span>
+        </a>
+    </div>
+</body>
+</html>
