@@ -21,7 +21,7 @@
             margin: 0 auto;
             padding: 0 15px;
         }
-        /* 通用板块样式 *
+        /* 通用板块样式 */
         .section {
             background: white;
             border-radius: 12px;
@@ -61,6 +61,11 @@
             margin-top: 5px;
         }
         /* 通知公告板块 */
+        .notice-box {
+            border: 1px solid #dbeafe;
+            border-radius: 10px;
+            padding: 15px;
+        }
         .notice-list {
             list-style: none;
         }
@@ -234,16 +239,18 @@
             <h3 class="section-title">
                 <i class="fa fa-bullhorn"></i>通知公告
             </h3>
-            <ul class="notice-list">
-                <li class="notice-item">
-                    <a href="#">燃气费充值到账时间调整通知（2023年10月）</a>
-                    <span class="notice-time">10-01</span>
-                </li>
-                <li class="notice-item">
-                    <a href="#">国庆节期间缴费服务安排公告</a>
-                    <span class="notice-time">09-28</span>
-                </li>                          
-            </ul>
+            <div class="notice-box">
+                <ul class="notice-list">
+                    <li class="notice-item">
+                        <a href="#">燃气费充值到账时间调整通知（2023年10月）</a>
+                        <span class="notice-time">10-01</span>
+                    </li>
+                    <li class="notice-item">
+                        <a href="#">国庆节期间缴费服务安排公告</a>
+                        <span class="notice-time">09-28</span>
+                    </li>                          
+                </ul>
+            </div>
         </div>
         <!-- 商品列表（四行，一行一个） -->
         <div class="product-list">
