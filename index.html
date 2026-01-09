@@ -3,353 +3,720 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>彦祖之家 - 生活缴费</title>
+    <title>生活缴费服务</title>
+    <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/font-awesome@4.7.0/css/font-awesome.min.css" rel="stylesheet">
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-            font-family: 'PingFang SC', 'Helvetica Neue', Arial, sans-serif;
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        primary: '#3b82f6',
+                        secondary: '#f97316',
+                        notice: '#ef4444',
+                        techCyan: '#22d3ee',
+                        techPurple: '#a855f7',
+                    },
+                    fontFamily: {
+                        sans: ['PingFang SC', 'Helvetica Neue', 'Arial', 'sans-serif'],
+                    },
+                }
+            }
         }
-        body {
-            background-color: #f5f7fa;
-            padding-bottom: 60px;
+    </script>
+    <style type="text/tailwindcss">
+        @layer utilities {
+            .product-shadow {
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+                transition: transform 0.3s ease, box-shadow 0.3s ease;
+            }
+            .product-shadow:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 20px rgba(0, 0, 0, 0.12);
+            }
+            .divider {
+                height: 1px;
+                background: linear-gradient(90deg, transparent, #e5e7eb, transparent);
+            }
+            .notice-shadow {
+                box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+            }
+            .notice-item {
+                border-left: 3px solid theme('colors.notice');
+                transition: background-color 0.2s ease;
+            }
+            .notice-item:hover {
+                background-color: rgba(239, 68, 68, 0.03);
+            }
+            .download-card {
+                transition: all 0.3s ease;
+            }
+            .download-card:hover {
+                transform: translateY(-3px);
+                box-shadow: 0 8px 16px rgba(0, 0, 0, 0.1);
+            }
+            .tag {
+                @apply inline-block px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800;
+            }
+            /* 弹幕悬浮暂停 */
+            .marquee-row:hover .marquee-content {
+                animation-play-state: paused;
+            }
+            /* 产品图片固定比例 */
+            .product-img-container {
+                aspect-ratio: 4/3;
+            }
+            /* 科技感渐变文字 */
+            .text-gradient {
+                @apply bg-clip-text text-transparent bg-gradient-to-r from-techCyan to-techPurple;
+            }
+            /* 导航栏菜单按钮 */
+            .menu-btn {
+                @apply relative w-6 h-6 cursor-pointer;
+            }
+            .menu-btn span {
+                @apply absolute left-0 w-full h-0.5 bg-white transition-all duration-300;
+            }
+            .menu-btn span:nth-child(1) {
+                top: 0;
+            }
+            .menu-btn span:nth-child(2) {
+                top: 50%;
+                transform: translateY(-50%);
+            }
+            .menu-btn span:nth-child(3) {
+                bottom: 0;
+            }
+            /* 底部tab栏 */
+            .bottom-tab {
+                @apply fixed bottom-0 left-0 right-0 bg-white border-t border-gray-200 flex justify-around items-center h-16 z-50 shadow-lg;
+            }
+            .tab-item {
+                @apply flex flex-col items-center justify-center flex-1 text-gray-500 hover:text-primary transition-colors;
+            }
+            .tab-item.active {
+                @apply text-primary;
+            }
+            .tab-icon {
+                @apply text-xl mb-1;
+            }
+            .tab-text {
+                @apply text-xs;
+            }
         }
-        .container {
-            max-width: 400px;
-            margin: 0 auto;
-            padding: 0 15px;
-        }
-        /* 通用板块样式 */
-        .section {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
+    </style>
+
+<style>
+    /* 弹幕动画调整 - 初始显示完整内容 */
+    .marquee-row {
+        white-space: nowrap;
+        position: relative;
+        overflow: hidden;
+        height: 2.25rem;
+    }
+    .marquee-content {
+        display: inline-block;
+        /* 初始位置调整为完全显示在容器内 */
+        transform: translateX(0);
+    }
+    /* 从右向左滚动动画 */
+    @keyframes marquee-right {
+        0% { transform: translateX(0); }         /* 开始时完全显示 */
+        100% { transform: translateX(-50%); }    /* 滚动到一半时触发循环 */
+    }
+    /* 动画设置：循环无缝滚动 */
+    .row-1 { animation: marquee-right 20s linear infinite; }
+    .row-2 { animation: marquee-right 25s linear infinite; }
+    .row-3 { animation: marquee-right 18s linear infinite; }
+</style>
+
+
+
+
+
+
+<style>
+
+
+        /* 产品卡片样式 */
+        .product-shadow {
             box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            margin-bottom: 15px;
+            transition: all 0.3s ease;
         }
-        .section-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: center;
-        }
-        .section-title i {
-            color: #3b82f6;
-            margin-right: 8px;
-            font-size: 18px;
-        }
-        /* 顶部导航 */
-        .top-nav {
-            background: linear-gradient(to right, #1e40af, #3b82f6);
-            color: white;
-            padding: 18px 15px;
-            border-radius: 16px;
-            margin: 15px 0;
+        .product-shadow:hover {
             box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+            transform: translateY(-2px);
         }
-        .top-nav h1 {
-            font-size: 18px;
-            font-weight: 600;
+        .product-img-container {
+            aspect-ratio: 4/3;
         }
-        .top-nav p {
-            font-size: 14px;
-            opacity: 0.9;
-            margin-top: 5px;
+        /* 页面底部留出tab栏空间 */
+        body {
+            padding-bottom: 4rem;
         }
-        /* 通知公告板块 */
-        .notice-box {
-            border: 1px solid #dbeafe;
-            border-radius: 10px;
-            padding: 15px;
-        }
-        .notice-list {
-            list-style: none;
-        }
-        .notice-item {
-            padding: 10px 0;
-            border-bottom: 1px solid #f1f5f9;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-        .notice-item:last-child {
-            border-bottom: none;
-        }
-        .notice-item a {
-            color: #334155;
-            font-size: 14px;
-            text-decoration: none;
-            display: -webkit-box;
-            -webkit-line-clamp: 1;
-            -webkit-box-orient: vertical;
+        /* FAQ 样式 */
+        .faq-section {
+            position: relative;
+            background-color: white;
+            border-radius: 1rem;
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            border: 1px solid #e5e7eb;
+            padding: 1.5rem;
+            margin-bottom: 2.5rem;
             overflow: hidden;
-            flex: 1;
         }
-        .notice-time {
-            font-size: 12px;
-            color: #94a3b8;
-            margin-left: 10px;
-            white-space: nowrap;
+        .faq-bg-blur {
+            position: absolute;
+            width: 10rem;
+            height: 10rem;
+            border-radius: 50%;
+            filter: blur(2rem);
+            opacity: 0.5;
         }
-                
-        /* 商品列表（四行，一行一个） */
-        .product-list {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            margin-top: 15px;
-        }
-        .product-card {
-            background: white;
-            border-radius: 12px;
-            padding: 15px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        .faq-title-wrap {
             display: flex;
             align-items: center;
-            gap: 15px;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
         }
-        .product-img {
-            width: 80px;
-            height: 80px;
-            border-radius: 8px;
-            object-fit: cover;
-            background-color: #eff6ff;
+        .faq-title-icon {
+            width: 2rem;
+            height: 2rem;
+            border-radius: 50%;
+            background-color: rgba(99, 102, 241, 0.1);
             display: flex;
             align-items: center;
             justify-content: center;
             color: #3b82f6;
-            font-size: 24px;
         }
-        .product-info {
-            flex: 1;
+        .faq-item {
+            border: 1px solid #e5e7eb;
+            border-radius: 0.5rem;
+            overflow: hidden;
+            transition: all 0.2s ease;
         }
-        .product-tags {
-            display: flex;
-            gap: 6px;
-            margin-bottom: 8px;
+        .faq-item:hover {
+            border-color: rgba(99, 102, 241, 0.2);
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
         }
-        .tag {
-            font-size: 10px;
-            padding: 2px 8px;
-            border-radius: 12px;
-        }
-        .tag-hot {
-            background-color: #fee2e2;
-            color: #dc2626;
-        }
-        .tag-fast {
-            background-color: #dcfce7;
-            color: #16a34a;
-        }
-        .tag-safe {
-            background-color: #dbeafe;
-            color: #2563eb;
-        }
-        .tag-all {
-            background-color: #f5f5f4;
-            color: #57534e;
-        }
-        .product-title {
-            font-size: 16px;
-            font-weight: 600;
-            color: #1e293b;
-            margin-bottom: 5px;
-        }
-        .product-desc {
-            font-size: 12px;
-            color: #64748b;
-            margin-bottom: 8px;
-        }
-        .product-price {
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-        .price-current {
-            font-size: 15px;
-            font-weight: 700;
-            color: #3b82f6;
-        }
-        .price-original {
-            font-size: 12px;
-            color: #94a3b8;
-            text-decoration: line-through;
-        }
-        .buy-btn {
-            background-color: #3b82f6;
-            color: white;
-            border: none;
-            border-radius: 20px;
-            padding: 6px 15px;
-            font-size: 13px;
-            font-weight: 500;
-            cursor: pointer;
-            transition: background-color 0.2s;
-        }
-        .buy-btn:hover {
-            background-color: #2563eb;
-        }
-        /* 底部tab栏 */
-        .bottom-tab {
-            position: fixed;
-            bottom: 0;
-            left: 0;
+        .faq-btn {
             width: 100%;
-            background-color: white;
             display: flex;
-            justify-content: space-around;
-            padding: 10px 0;
-            box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
-        }
-        .tab-item {
-            display: flex;
-            flex-direction: column;
+            justify-content: space-between;
             align-items: center;
-            color: #94a3b8;
-            text-decoration: none;
-            font-size: 11px;
-            gap: 3px;
+            padding: 0.75rem;
+            text-align: left;
+            background-color: #f9fafb;
+            border: none;
+            cursor: pointer;
+            font-size: 0.9375rem;
+            color: #1f2937;
+            font-weight: 500;
         }
-        .tab-item.active {
+        .faq-content {
+            max-height: 0;
+            overflow: hidden;
+            transition: max-height 0.3s ease;
+            background-color: white;
+        }
+        .faq-content-inner {
+            padding: 0.75rem;
+            font-size: 0.875rem;
+            color: #4b5563;
+            line-height: 1.5;
+        }
+        .faq-item.active .faq-content {
+            max-height: 200px;
+        }
+        .faq-item.active .faq-icon {
+            transform: rotate(180deg);
             color: #3b82f6;
         }
-        .tab-icon {
-            font-size: 20px;
+        .faq-icon {
+            transition: all 0.3s ease;
+            color: #4b5563;
         }
-        /* 加载状态 */
-        .loading {
-            color: #94a3b8;
-            font-size: 14px;
+        .faq-help-text {
+            margin-top: 1rem;
+            text-align: center;
+            font-size: 0.875rem;
+            color: #4b5563;
+        }
+        .faq-link {
+            color: #3b82f6;
+            text-decoration: none;
+            font-weight: 500;
+        }
+        .faq-link:hover {
+            text-decoration: underline;
         }
     </style>
 </head>
-<body>
-    <div class="container">
-        <!-- 顶部介绍 -->
-        <div class="top-nav">
-            <h1>生活缴费服务</h1>
-            <p>安全便捷的水电燃气费缴纳，支持多渠道支付</p>
-        </div>
-        <!-- 通知公告板块 -->
-        <div class="section">
-            <h3 class="section-title">
-                <i class="fa fa-bullhorn"></i>通知公告
-            </h3>
-            <div class="notice-box">
-                <ul class="notice-list">
-                    <li class="notice-item">
-                        <a href="#">支持主流交易所，0手续费交易</a>
-                        <span class="notice-time">10-01</span>
-                    </li>
-                    <li class="notice-item">
-                        <a href="#">时效72h 支持无理由退款</a>
-                        <span class="notice-time">09-28</span>
-                    </li>                          
-                </ul>
+<body class="bg-gray-50 font-sans">
+    <div class="container mx-auto px-4 py-6 max-w-4xl">
+        
+        <!-- 强制移动端视图核心：固定视口宽度+禁用缩放 -->
+        <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+
+        <!-- 带弹幕的公告板块 -->
+        <div class="relative bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 shadow-md border border-blue-100 mb-6 overflow-hidden transition-all duration-300 hover:shadow-lg">
+            <!-- 装饰元素 -->
+            <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full opacity-50 -mr-12 -mt-12"></div>
+            <div class="absolute bottom-0 left-0 w-16 h-16 bg-indigo-100 rounded-full opacity-50 -ml-8 -mb-8"></div>
+            
+            <!-- 通知公告标题 -->
+            <div class="flex items-center mb-3 pb-2 border-b border-blue-100 relative z-10">
+                <div class="w-6 h-6 rounded-full bg-notice flex items-center justify-center mr-2">
+                    <i class="fa fa-bullhorn text-white text-xs"></i>
+                </div>
+                <h3 class="font-semibold text-gray-800">通知公告</h3>
+                <span class="ml-2 text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">实时更新</span>
+            </div>
+            
+            <!-- 第一行：客服与社群信息 -->
+            <div class="marquee-row h-9 overflow-hidden mb-2 relative z-10">
+                <div class="marquee-content row-1 flex items-center h-full">
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-user-circle text-primary mr-1"></i> 客服TG@o4272</span>
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-user-circle text-primary mr-1"></i> 客服TG@svip996699</span>
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-comments text-purple-500 mr-1"></i> 不禁言交流群@huafeiXL1</span>
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-user-circle text-primary mr-1"></i> 客服TG@o4272</span>
+                </div>
+            </div>
+            
+            <!-- 第二行：安全与合作提示 -->
+            <div class="marquee-row h-9 overflow-hidden mb-2 relative z-10">
+                <div class="marquee-content row-2 flex items-center h-full">
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-exclamation-triangle text-yellow-500 mr-1"></i> 警惕任何私聊消息</span>
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-shield text-green-500 mr-1"></i> 注意防骗</span>
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-handshake-o text-blue-500 mr-1"></i> 诚信交易</span>
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-line-chart text-indigo-500 mr-1"></i> 合作共赢</span>
+                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-exclamation-triangle text-yellow-500 mr-1"></i> 警惕任何私聊消息</span>
+                </div>
+            </div>
+            
+            <!-- 第三行：服务与支持信息 -->
+            <div class="marquee-row h-9 overflow-hidden relative z-10">
+                <div class="marquee-content row-3 flex items-center h-full">
+                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-fire text-orange-500 mr-1"></i> 燃气速度提升30%</span>
+                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-bolt text-yellow-600 mr-1"></i> 电费速度一般</span>
+                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-clock-o text-gray-500 mr-1"></i> 72小时到账</span>
+                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-exchange text-blue-500 mr-1"></i> 支持主流交易所</span>
+                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-percent text-green-500 mr-1"></i> 0手续费交易</span>
+                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-refresh text-purple-500 mr-1"></i> 随时退款</span>
+                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-download text-blue-500 mr-1"></i> 常用软件下载地址在最下面</span>
+                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-fire text-orange-500 mr-1"></i> 燃气速度提升30%</span>
+                </div>
+            </div>
+            <!-- 进群按钮（弹幕下方） -->
+            <div class="mt-4 pt-3 border-t border-blue-100 flex justify-center relative z-10">
+                <a href="https://t.me/huafeiXL1" target="_blank" class="group flex items-center px-6 py-2.5 bg-gradient-to-r from-techPurple to-techCyan text-white rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
+                    <i class="fa fa-comments-o mr-2 text-lg group-hover:scale-110 transition-transform"></i>
+                    <span class="font-medium">加入不禁言交流群</span>
+                    <i class="fa fa-arrow-right ml-2 group-hover:translate-x-1 transition-transform"></i>
+                </a>
             </div>
         </div>
-        <!-- 商品列表（四行，一行一个） -->
-        <div class="product-list">
-            <!-- 商品1 -->
-            <div class="product-card">
-                <div class="product-img">
-                    <i class="fa fa-bolt"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-tags">
-                        <span class="tag tag-hot">热门</span>
-                        <span class="tag tag-safe">安全</span>
+
+        <!-- 产品介绍 -->
+        <div class="mb-8 bg-white rounded-2xl p-6 shadow-md border border-gray-100 overflow-hidden relative transition-all duration-300 hover:shadow-lg">
+            <!-- 装饰元素 -->
+            <div class="absolute -top-6 -right-6 w-20 h-20 bg-primary/5 rounded-full"></div>
+            <div class="absolute -bottom-4 -left-4 w-16 h-16 bg-primary/5 rounded-full opacity-70"></div>
+            
+            <div class="relative z-10">
+                <!-- 科技感数据卡片 -->
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4 mt-6">
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
+                        <i class="fa fa-clock-o text-primary text-xl mb-2"></i>
+                        <span class="text-gray-500 text-xs">到账时效</span>
+                        <span class="text-gray-800 font-bold">72h</span>
                     </div>
-                    <h3 class="product-title">全国电费慢充</h3>
-                    <p class="product-desc">72小时到账，未到账全额退款，支持全国各地区</p>
-                    <div class="product-price">
-                        <span class="price-current">¥800</span>
-                        <span class="price-original">¥1000</span>
-                        <button class="buy-btn" onclick="window.location.href='https://t.me/huafeiXL_Bot'">立即下单</button>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
+                        <i class="fa fa-percent text-secondary text-xl mb-2"></i>
+                        <span class="text-gray-500 text-xs">折扣力度</span>
+                        <span class="text-gray-800 font-bold">8折起</span>
                     </div>
-                </div>
-            </div>
-            <!-- 商品2 -->
-            <div class="product-card">
-                <div class="product-img">
-                    <i class="fa fa-tint"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-tags">
-                        <span class="tag tag-all">通用</span>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
+                        <i class="fa fa-shield text-green-500 text-xl mb-2"></i>
+                        <span class="text-gray-500 text-xs">保障服务</span>
+                        <span class="text-gray-800 font-bold">全额退款</span>
                     </div>
-                    <h3 class="product-title">居民水费代缴</h3>
-                    <p class="product-desc">支持阶梯水价计算，含污水处理费，实时到账提醒</p>
-                    <div class="product-price">
-                        <span class="price-current">¥800</span>
-                        <span class="price-original">¥1000</span>
-                        
-<button class="buy-btn" onclick="window.location.href='https://t.me/huafeiXL_Bot'">立即下单</button>
-                    </div>
-                </div>
-            </div>
-            <!-- 商品3 -->
-            <div class="product-card">
-                <div class="product-img">
-                    <i class="fa fa-fire"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-tags">
-                        <span class="tag tag-fast">快速</span>
-                        <span class="tag tag-hot">热门</span>
-                    </div>
-                    <h3 class="product-title">天然气充值</h3>
-                    <p class="product-desc">覆盖全国90%城市，24小时内到账，支持液化气</p>
-                    <div class="product-price">
-                        <span class="price-current">¥800</span>
-                        <span class="price-original">¥1000</span>
-                        <button class="buy-btn" onclick="window.location.href='https://t.me/huafeiXL_Bot'">立即下单</button>
-                    </div>
-                </div>
-            </div>
-            <!-- 商品4 -->
-            <div class="product-card">
-                <div class="product-img">
-                    <i class="fa fa-mobile"></i>
-                </div>
-                <div class="product-info">
-                    <div class="product-tags">
-                        <span class="tag tag-all">三网通用</span>
-                        <span class="tag tag-fast">秒到</span>
-                    </div>
-                    <h3 class="product-title">三网话费慢充</h3>
-                    <p class="product-desc">移动/联通/电信通用，充错可追回，支持大额充值</p>
-                    <div class="product-price">
-                        <span class="price-current">¥800</span>
-                        <span class="price-original">¥1000</span>
-                        <button class="buy-btn" onclick="window.location.href='https://t.me/huafeiXL_Bot'">立即下单</button>
+                    <div class="bg-slate-50 rounded-xl p-4 border border-slate-200 flex flex-col items-center text-center shadow-sm hover:shadow-md transition-shadow">
+                        <i class="fa fa-users text-purple-500 text-xl mb-2"></i>
+                        <span class="text-gray-500 text-xs">用户规模</span>
+                        <span class="text-gray-800 font-bold">1W+</span>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+
+        <!-- 产品列表 -->
+        <div id="products" class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-10 overflow-hidden relative">
+            <!-- 装饰元素 -->
+            <div class="absolute top-0 left-0 w-32 h-32 bg-primary/5 rounded-full -translate-x-1/2 -translate-y-1/2"></div>
+            <div class="absolute bottom-0 right-0 w-24 h-24 bg-secondary/5 rounded-full translate-x-1/4 translate-y-1/4"></div>
+            
+            <!-- 产品列表标题 -->
+            <div class="flex items-center mb-6 relative z-10">
+                <div class="w-8 h-8 rounded-full bg-primary/10 flex items-center justify-center mr-2">
+                    <i class="fa fa-th-list text-primary"></i>
+                </div>
+                <h2 class="text-xl font-bold text-gray-800">优惠缴费项目</h2>
+            </div>
+
+            <div class="space-y-6 relative z-10 max-w-4xl mx-auto px-4 py-6">
+                <!-- 产品1：电费 -->
+                <div class="rounded-xl overflow-visible shadow-md hover:shadow-lg transition-all duration-300 bg-white border border-gray-100 relative">
+                    <div class="absolute top-0 left-0 z-20">
+                        <span class="inline-block px-3 py-1 bg-yellow-500 text-white text-xs font-medium rounded-br-lg shadow-sm">
+                            电力专属
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row">
+                        <div class="w-full sm:w-1/4 relative h-40 sm:h-auto overflow-hidden">
+                            <img src="https://youke3.picui.cn/s1/2026/01/05/695bcb86ee4f0.jpeg" alt="电费缴费" 
+                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+                                 loading="lazy">
+                        </div>
+
+                        <div class="w-full sm:w-3/4 p-5">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                                    <i class="fa fa-bolt text-yellow-500 mr-2"></i>电费慢充
+                                </h3>
+                                <div class="text-right">
+                                    <div class="text-gray-400 text-sm line-through">¥1000</div>
+                                    <div class="text-blue-600 font-bold text-xl mt-0.5">¥800</div>
+                                    <div class="text-green-600 text-xs mt-1">立省¥200</div>
+                                </div>
+                            </div>
+
+                            <p class="text-gray-600 text-sm mb-4">
+                                全国电网通用，1000元起充，72小时内到账，未到账全额退款
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>国网支持
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>南网支持
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-blue-50 text-blue-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>居民用电专属
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-purple-50 text-purple-700 text-xs rounded-full">
+                                    <i class="fa fa-clock-o mr-1"></i>72小时到账
+                                </span>
+                            </div>
+
+                            <a href="http://t.me/huafeiXL_Bot" class="inline-block bg-blue-600 hover:bg-blue-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:-translate-y-0.5">
+                                <i class="fa fa-shopping-cart mr-1"></i> 立即下单
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 产品2：水费 -->
+                <div class="rounded-xl overflow-visible shadow-md hover:shadow-lg transition-all duration-300 bg-white border border-gray-100 relative">
+                    <div class="absolute top-0 left-0 z-20">
+                        <span class="inline-block px-3 py-1 bg-cyan-500 text-white text-xs font-medium rounded-br-lg shadow-sm">
+                            推荐下单
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row">
+                        <div class="w-full sm:w-1/4 relative h-40 sm:h-auto overflow-hidden">
+                            <img src="https://youke3.picui.cn/s1/2026/01/05/695bc8d89ee03.jpeg" alt="水费缴费" 
+                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+                                 loading="lazy">
+                        </div>
+
+                        <div class="w-full sm:w-3/4 p-5">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                                    <i class="fa fa-tint text-cyan-500 mr-2"></i>水费慢充
+                                </h3>
+                                <div class="text-right">
+                                    <div class="text-gray-400 text-sm line-through">¥1000</div>
+                                    <div class="text-cyan-600 font-bold text-xl mt-0.5">¥800</div>
+                                    <div class="text-green-600 text-xs mt-1">立省¥200</div>
+                                </div>
+                            </div>
+
+                            <p class="text-gray-600 text-sm mb-4">
+                                全国主流自来水公司通用，1000元起充，72小时内到账
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="inline-flex items-center px-2.5 py-1 bg-cyan-50 text-cyan-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>含污水处理费
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-cyan-50 text-cyan-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>阶梯水价支持
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-purple-50 text-purple-700 text-xs rounded-full">
+                                    <i class="fa fa-clock-o mr-1"></i>72小时到账
+                                </span>
+                            </div>
+
+                            <a href="http://t.me/huafeiXL_Bot" class="inline-block bg-cyan-600 hover:bg-cyan-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:-translate-y-0.5">
+                                <i class="fa fa-shopping-cart mr-1"></i> 立即下单
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 产品3：燃气 -->
+                <div class="rounded-xl overflow-visible shadow-md hover:shadow-lg transition-all duration-300 bg-white border border-gray-100 relative">
+                    <div class="absolute top-0 left-0 z-20">
+                        <span class="inline-block px-3 py-1 bg-orange-500 text-white text-xs font-medium rounded-br-lg shadow-sm">
+                            推荐下单
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row">
+                        <div class="w-full sm:w-1/4 relative h-40 sm:h-auto overflow-hidden">
+                            <img src="https://youke3.picui.cn/s1/2026/01/05/695bc8066a815.jpeg" alt="燃气缴费" 
+                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+                                 loading="lazy">
+                        </div>
+
+                        <div class="w-full sm:w-3/4 p-5">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                                    <i class="fa fa-fire text-orange-500 mr-2"></i>燃气费慢充
+                                </h3>
+                                <div class="text-right">
+                                    <div class="text-gray-400 text-sm line-through">¥1000</div>
+                                    <div class="text-orange-600 font-bold text-xl mt-0.5">¥800</div>
+                                    <div class="text-green-600 text-xs mt-1">立省¥200</div>
+                                </div>
+                            </div>
+
+                            <p class="text-gray-600 text-sm mb-4">
+                                覆盖全国天然气/液化气用户，1000元起充，72小时内到账
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="inline-flex items-center px-2.5 py-1 bg-orange-50 text-orange-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>天然气支持
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-orange-50 text-orange-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>液化气支持
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-purple-50 text-purple-700 text-xs rounded-full">
+                                    <i class="fa fa-clock-o mr-1"></i>72小时到账
+                                </span>
+                            </div>
+
+                            <a href="http://t.me/huafeiXL_Bot" class="inline-block bg-orange-600 hover:bg-orange-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:-translate-y-0.5">
+                                <i class="fa fa-shopping-cart mr-1"></i> 立即下单
+                            </a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 产品4：话费 -->
+                <div class="rounded-xl overflow-visible shadow-md hover:shadow-lg transition-all duration-300 bg-white border border-gray-100 relative">
+                    <div class="absolute top-0 left-0 z-20">
+                        <span class="inline-block px-3 py-1 bg-green-500 text-white text-xs font-medium rounded-br-lg shadow-sm">
+                            暂停接单
+                        </span>
+                    </div>
+
+                    <div class="flex flex-col sm:flex-row">
+                        <div class="w-full sm:w-1/4 relative h-40 sm:h-auto overflow-hidden">
+                            <img src="https://youke3.picui.cn/s1/2026/01/05/695bc7b663a00.jpeg" alt="话费充值" 
+                                 class="absolute inset-0 w-full h-full object-cover transition-transform duration-700 hover:scale-110" 
+                                 loading="lazy">
+                        </div>
+
+                        <div class="w-full sm:w-3/4 p-5">
+                            <div class="flex justify-between items-start mb-3">
+                                <h3 class="text-lg font-bold text-gray-800 flex items-center">
+                                    <i class="fa fa-mobile text-green-500 mr-2 text-lg"></i>手机话费慢充
+                                </h3>
+                                <div class="text-right">
+                                    <div class="text-gray-400 text-sm line-through">¥1000</div>
+                                    <div class="text-green-600 font-bold text-xl mt-0.5">¥800</div>
+                                    <div class="text-green-600 text-xs mt-1">立省¥200</div>
+                                </div>
+                            </div>
+
+                            <p class="text-gray-600 text-sm mb-4">
+                                三网通用（移动/联通/电信），1000元起充，72小时内到账
+                            </p>
+
+                            <div class="flex flex-wrap gap-2 mb-4">
+                                <span class="inline-flex items-center px-2.5 py-1 bg-green-50 text-green-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>移动支持
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-green-50 text-green-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>联通支持
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-green-50 text-green-700 text-xs rounded-full">
+                                    <i class="fa fa-check-circle mr-1"></i>电信支持
+                                </span>
+                                <span class="inline-flex items-center px-2.5 py-1 bg-purple-50 text-purple-700 text-xs rounded-full">
+                                    <i class="fa fa-clock-o mr-1"></i>72小时到账
+                                </span>
+                            </div>
+
+                            <a href="http://t.me/huafeiXL_Bot" class="inline-block bg-green-600 hover:bg-green-700 text-white px-4 py-2 rounded-lg text-sm font-medium transition-all transform hover:-translate-y-0.5">
+                                <i class="fa fa-shopping-cart mr-1"></i> 立即下单
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 美化版 FAQ 板块 -->
+            <section class="faq-section">
+                <div class="absolute top-0 right-0 w-32 h-32 bg-techPurple/5 rounded-full -translate-x-1/2 -translate-y-1/2 blur-2xl"></div>
+                <div class="absolute bottom-0 left-0 w-32 h-32 bg-techCyan/5 rounded-full translate-x-1/2 translate-y-1/2 blur-2xl"></div>
+
+                <div class="relative z-10 max-w-4xl mx-auto">
+                    <div class="faq-title-wrap">
+                        <div class="faq-title-icon">
+                            <i class="fa fa-question-circle"></i>
+                        </div>
+                        <h2 class="text-xl font-bold text-gray-800">常见问题</h2>
+                    </div>
+
+                    <div class="space-y-3">
+                        <div class="faq-item">
+                            <button class="faq-btn" onclick="toggleFaqItem(this.parentElement)">
+                                <span>支持哪些地区的缴费？</span>
+                                <i class="fa fa-chevron-down faq-icon"></i>
+                            </button>
+                            <div class="faq-content">
+                                <div class="faq-content-inner">
+                                    全国国网、南网电力，主流城市水燃气，移动/联通/电信三网话费均可充值，偏远地区可咨询客服。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-btn" onclick="toggleFaqItem(this.parentElement)">
+                                <span>加密支付支持哪些币种？</span>
+                                <i class="fa fa-chevron-down faq-icon"></i>
+                            </button>
+                            <div class="faq-content">
+                                <div class="faq-content-inner">
+                                    支持USDT（ERC20/TRC20）、BTC、ETH，转账后上传哈希凭证即可。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-btn" onclick="toggleFaqItem(this.parentElement)">
+                                <span>多久到账？不到账怎么办？</span>
+                                <i class="fa fa-chevron-down faq-icon"></i>
+                            </button>
+                            <div class="faq-content">
+                                <div class="faq-content-inner">
+                                    72小时未到账可凭订单号联系客服，全额退款支持原币种返还。
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="faq-item">
+                            <button class="faq-btn" onclick="toggleFaqItem(this.parentElement)">
+                                <span>加密支付汇率怎么算？</span>
+                                <i class="fa fa-chevron-down faq-icon"></i>
+                            </button>
+                            <div class="faq-content">
+                                <div class="faq-content-inner">
+                                    实时对接交易所行情，下单锁定价格，无溢价，延迟到账多退少补。
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="faq-help-text">
+                        其他疑问？<a href="http://t.me/huafeiXL_Bot" class="faq-link">联系客服</a>
+                    </div>
+                </div>
+            </section>
+        </div>
+
+        
     <!-- 底部tab栏 -->
     <div class="bottom-tab">
-        <a href="index.html" class="tab-item active">
+        <a href="#products" class="tab-item active">
             <i class="fa fa-home tab-icon"></i>
-            <span>生活缴费</span>
+            <span class="tab-text">生活缴费</span>
         </a>
-        <a href="pianshugb.html" class="tab-item">
+        <a href="#anti-fraud" class="tab-item">
             <i class="fa fa-shield tab-icon"></i>
-            <span>骗术公布</span>
+            <span class="tab-text">防骗指南</span>
         </a>
-        <a href="ruanjianxz.html" class="tab-item">
+        <a href="#downloads" class="tab-item">
             <i class="fa fa-download tab-icon"></i>
-            <span>软件下载</span>
+            <span class="tab-text">软件下载</span>
         </a>
-        <a href="home.html" class="tab-item">
+        <a href="#home" class="tab-item">
             <i class="fa fa-user tab-icon"></i>
-            <span>彦祖之家</span>
+            <span class="tab-text">彦祖之家</span>
         </a>
     </div>
+
+    <script>
+        // 移动端菜单切换
+        const menuBtn = document.getElementById('menuBtn');
+        const mobileMenu = document.getElementById('mobileMenu');
+
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+            const spans = menuBtn.querySelectorAll('span');
+            spans.forEach((span, index) => {
+                if (mobileMenu.classList.contains('hidden')) {
+                    span.style.transform = '';
+                    span.style.opacity = '1';
+                } else {
+                    if (index === 0) {
+                        span.style.transform = 'translateY(6px) rotate(45deg)';
+                    } else if (index === 1) {
+                        span.style.opacity = '0';
+                    } else if (index === 2) {
+                        span.style.transform = 'translateY(-6px) rotate(-45deg)';
+                    }
+                }
+            });
+        });
+
+        // 锚点跳转平滑滚动
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 20,
+                        behavior: 'smooth'
+                    });
+                    if (!mobileMenu.classList.contains('hidden')) {
+                        mobileMenu.classList.add('hidden');
+                        const spans = menuBtn.querySelectorAll('span');
+                        spans.forEach((span, index) => {
+                            span.style.transform = '';
+                            span.style.opacity = '1';
+                        });
+                    }
+                }
+            });
+        });
+
+        // FAQ 切换
+        function toggleFaqItem(faqItem) {
+            document.querySelectorAll('.faq-item').forEach(item => {
+                if (item !== faqItem) item.classList.remove('active');
+            });
+            faqItem.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
