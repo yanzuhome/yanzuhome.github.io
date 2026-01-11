@@ -58,10 +58,6 @@
             .tag {
                 @apply inline-block px-2 py-1 text-xs rounded-full bg-blue-100 text-blue-800;
             }
-            /* 弹幕悬浮暂停 */
-            .marquee-row:hover .marquee-content {
-                animation-play-state: paused;
-            }
             /* 产品图片固定比例 */
             .product-img-container {
                 aspect-ratio: 4/3;
@@ -107,150 +103,115 @@
     </style>
 
 <style>
-    /* 弹幕动画调整 - 初始显示完整内容 */
-    .marquee-row {
-        white-space: nowrap;
+    /* 页面底部留出tab栏空间 */
+    body {
+        padding-bottom: 4rem;
+    }
+    /* FAQ 样式 */
+    .faq-section {
         position: relative;
+        background-color: white;
+        border-radius: 1rem;
+        box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        border: 1px solid #e5e7eb;
+        padding: 1.5rem;
+        margin-bottom: 2.5rem;
         overflow: hidden;
-        height: 2.25rem;
     }
-    .marquee-content {
-        display: inline-block;
-        /* 初始位置调整为完全显示在容器内 */
-        transform: translateX(0);
+    .faq-bg-blur {
+        position: absolute;
+        width: 10rem;
+        height: 10rem;
+        border-radius: 50%;
+        filter: blur(2rem);
+        opacity: 0.5;
     }
-    /* 从右向左滚动动画 */
-    @keyframes marquee-right {
-        0% { transform: translateX(0); }         /* 开始时完全显示 */
-        100% { transform: translateX(-50%); }    /* 滚动到一半时触发循环 */
+    .faq-title-wrap {
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        margin-bottom: 1.5rem;
     }
-    /* 动画设置：循环无缝滚动 */
-    .row-1 { animation: marquee-right 20s linear infinite; }
-    .row-2 { animation: marquee-right 25s linear infinite; }
-    .row-3 { animation: marquee-right 18s linear infinite; }
+    .faq-title-icon {
+        width: 2rem;
+        height: 2rem;
+        border-radius: 50%;
+        background-color: rgba(99, 102, 241, 0.1);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        color: #3b82f6;
+    }
+    .faq-item {
+        border: 1px solid #e5e7eb;
+        border-radius: 0.5rem;
+        overflow: hidden;
+        transition: all 0.2s ease;
+    }
+    .faq-item:hover {
+        border-color: rgba(99, 102, 241, 0.2);
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
+    }
+    .faq-btn {
+        width: 100%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 0.75rem;
+        text-align: left;
+        background-color: #f9fafb;
+        border: none;
+        cursor: pointer;
+        font-size: 0.9375rem;
+        color: #1f2937;
+        font-weight: 500;
+    }
+    .faq-content {
+        max-height: 0;
+        overflow: hidden;
+        transition: max-height 0.3s ease;
+        background-color: white;
+    }
+    .faq-content-inner {
+        padding: 0.75rem;
+        font-size: 0.875rem;
+        color: #4b5563;
+        line-height: 1.5;
+    }
+    .faq-item.active .faq-content {
+        max-height: 200px;
+    }
+    .faq-item.active .faq-icon {
+        transform: rotate(180deg);
+        color: #3b82f6;
+    }
+    .faq-icon {
+        transition: all 0.3s ease;
+        color: #4b5563;
+    }
+    .faq-help-text {
+        margin-top: 1rem;
+        text-align: center;
+        font-size: 0.875rem;
+        color: #4b5563;
+    }
+    .faq-link {
+        color: #3b82f6;
+        text-decoration: none;
+        font-weight: 500;
+    }
+    .faq-link:hover {
+        text-decoration: underline;
+    }
+    /* 公告滚动相关样式 - 取消过渡动画实现无缝 */
+    .notice-container {
+        height: 120px;
+        overflow: hidden;
+    }
+    .notice-list {
+        transition: none; /* 取消过渡动画，避免重置时卡顿 */
+    }
 </style>
-
-
-
-
-
-
-<style>
-
-
-        /* 产品卡片样式 */
-        .product-shadow {
-            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-            transition: all 0.3s ease;
-        }
-        .product-shadow:hover {
-            box-shadow: 0 4px 12px rgba(0,0,0,0.1);
-            transform: translateY(-2px);
-        }
-        .product-img-container {
-            aspect-ratio: 4/3;
-        }
-        /* 页面底部留出tab栏空间 */
-        body {
-            padding-bottom: 4rem;
-        }
-        /* FAQ 样式 */
-        .faq-section {
-            position: relative;
-            background-color: white;
-            border-radius: 1rem;
-            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
-            border: 1px solid #e5e7eb;
-            padding: 1.5rem;
-            margin-bottom: 2.5rem;
-            overflow: hidden;
-        }
-        .faq-bg-blur {
-            position: absolute;
-            width: 10rem;
-            height: 10rem;
-            border-radius: 50%;
-            filter: blur(2rem);
-            opacity: 0.5;
-        }
-        .faq-title-wrap {
-            display: flex;
-            align-items: center;
-            gap: 0.5rem;
-            margin-bottom: 1.5rem;
-        }
-        .faq-title-icon {
-            width: 2rem;
-            height: 2rem;
-            border-radius: 50%;
-            background-color: rgba(99, 102, 241, 0.1);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: #3b82f6;
-        }
-        .faq-item {
-            border: 1px solid #e5e7eb;
-            border-radius: 0.5rem;
-            overflow: hidden;
-            transition: all 0.2s ease;
-        }
-        .faq-item:hover {
-            border-color: rgba(99, 102, 241, 0.2);
-            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.03);
-        }
-        .faq-btn {
-            width: 100%;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            padding: 0.75rem;
-            text-align: left;
-            background-color: #f9fafb;
-            border: none;
-            cursor: pointer;
-            font-size: 0.9375rem;
-            color: #1f2937;
-            font-weight: 500;
-        }
-        .faq-content {
-            max-height: 0;
-            overflow: hidden;
-            transition: max-height 0.3s ease;
-            background-color: white;
-        }
-        .faq-content-inner {
-            padding: 0.75rem;
-            font-size: 0.875rem;
-            color: #4b5563;
-            line-height: 1.5;
-        }
-        .faq-item.active .faq-content {
-            max-height: 200px;
-        }
-        .faq-item.active .faq-icon {
-            transform: rotate(180deg);
-            color: #3b82f6;
-        }
-        .faq-icon {
-            transition: all 0.3s ease;
-            color: #4b5563;
-        }
-        .faq-help-text {
-            margin-top: 1rem;
-            text-align: center;
-            font-size: 0.875rem;
-            color: #4b5563;
-        }
-        .faq-link {
-            color: #3b82f6;
-            text-decoration: none;
-            font-weight: 500;
-        }
-        .faq-link:hover {
-            text-decoration: underline;
-        }
-    </style>
 </head>
 <body class="bg-gray-50 font-sans">
     <div class="container mx-auto px-4 py-6 max-w-4xl">
@@ -258,56 +219,34 @@
         <!-- 强制移动端视图核心：固定视口宽度+禁用缩放 -->
         <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 
-        <!-- 带弹幕的公告板块 -->
+        <!-- 替换后的通知公告板块 - 取消渐变遮罩 -->
         <div class="relative bg-gradient-to-r from-blue-50 to-indigo-50 rounded-2xl p-4 shadow-md border border-blue-100 mb-6 overflow-hidden transition-all duration-300 hover:shadow-lg">
             <!-- 装饰元素 -->
             <div class="absolute top-0 right-0 w-24 h-24 bg-blue-100 rounded-full opacity-50 -mr-12 -mt-12"></div>
             <div class="absolute bottom-0 left-0 w-16 h-16 bg-indigo-100 rounded-full opacity-50 -ml-8 -mb-8"></div>
             
             <!-- 通知公告标题 -->
-            <div class="flex items-center mb-3 pb-2 border-b border-blue-100 relative z-10">
-                <div class="w-6 h-6 rounded-full bg-notice flex items-center justify-center mr-2">
-                    <i class="fa fa-bullhorn text-white text-xs"></i>
+            <div class="flex items-center justify-between mb-3 pb-2 border-b border-blue-100 relative z-10">
+                <div class="flex items-center">
+                    <div class="w-6 h-6 rounded-full bg-notice flex items-center justify-center mr-2">
+                        <i class="fa fa-bullhorn text-white text-xs"></i>
+                    </div>
+                    <h3 class="font-semibold text-gray-800">通知公告</h3>
+                    <span class="ml-2 text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">实时更新</span>
                 </div>
-                <h3 class="font-semibold text-gray-800">通知公告</h3>
-                <span class="ml-2 text-xs text-blue-500 bg-blue-50 px-2 py-0.5 rounded-full">实时更新</span>
+                <button class="text-xs text-gray-400 hover:text-gray-500 transition-colors" onclick="toggleNoticeMarquee()">
+                    <i class="fa fa-pause mr-1"></i> 暂停
+                </button>
             </div>
             
-            <!-- 第一行：客服与社群信息 -->
-            <div class="marquee-row h-9 overflow-hidden mb-2 relative z-10">
-                <div class="marquee-content row-1 flex items-center h-full">
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-user-circle text-primary mr-1"></i> 客服TG@o4272</span>
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-user-circle text-primary mr-1"></i> 客服TG@svip996699</span>
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-comments text-purple-500 mr-1"></i> 不禁言交流群@huafeiXL1</span>
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-user-circle text-primary mr-1"></i> 客服TG@o4272</span>
-                </div>
-            </div>
-            
-            <!-- 第二行：安全与合作提示 -->
-            <div class="marquee-row h-9 overflow-hidden mb-2 relative z-10">
-                <div class="marquee-content row-2 flex items-center h-full">
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-exclamation-triangle text-yellow-500 mr-1"></i> 警惕任何私聊消息</span>
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-shield text-green-500 mr-1"></i> 注意防骗</span>
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-handshake-o text-blue-500 mr-1"></i> 诚信交易</span>
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-line-chart text-indigo-500 mr-1"></i> 合作共赢</span>
-                    <span class="inline-block mx-6 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-exclamation-triangle text-yellow-500 mr-1"></i> 警惕任何私聊消息</span>
+            <!-- 公告滚动容器 - 移除渐变遮罩 -->
+            <div class="notice-container relative z-10">
+                <div class="notice-list space-y-3" id="noticeList">
+                    <!-- 公告内容由JS动态生成 -->
                 </div>
             </div>
             
-            <!-- 第三行：服务与支持信息 -->
-            <div class="marquee-row h-9 overflow-hidden relative z-10">
-                <div class="marquee-content row-3 flex items-center h-full">
-                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-fire text-orange-500 mr-1"></i> 燃气速度提升30%</span>
-                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-bolt text-yellow-600 mr-1"></i> 电费速度一般</span>
-                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-clock-o text-gray-500 mr-1"></i> 72小时到账</span>
-                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-exchange text-blue-500 mr-1"></i> 支持主流交易所</span>
-                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-percent text-green-500 mr-1"></i> 0手续费交易</span>
-                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-refresh text-purple-500 mr-1"></i> 随时退款</span>
-                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-download text-blue-500 mr-1"></i> 常用软件下载地址在最下面</span>
-                    <span class="inline-block mx-4 px-3 py-1 bg-white/80 rounded-full shadow-sm"><i class="fa fa-fire text-orange-500 mr-1"></i> 燃气速度提升30%</span>
-                </div>
-            </div>
-            <!-- 进群按钮（弹幕下方） -->
+            <!-- 进群按钮 -->
             <div class="mt-4 pt-3 border-t border-blue-100 flex justify-center relative z-10">
                 <a href="https://t.me/huafeiXL1" target="_blank" class="group flex items-center px-6 py-2.5 bg-gradient-to-r from-techPurple to-techCyan text-white rounded-full shadow-md hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5">
                     <i class="fa fa-comments-o mr-2 text-lg group-hover:scale-110 transition-transform"></i>
@@ -317,8 +256,6 @@
             </div>
         </div>
 
-        
-                      
         <!-- 产品列表 -->
         <div id="products" class="bg-white rounded-2xl shadow-lg border border-gray-100 p-6 mb-10 overflow-hidden relative">
             <!-- 装饰元素 -->
@@ -611,7 +548,102 @@
             </section>
         </div>
 
-        
+
+<!-- 美化版 黑白风格新币担保交易横向滑动展示框 -->
+<div class="w-full max-w-[90%] mx-auto my-4 overflow-hidden">
+  <div class="relative bg-white rounded-xl p-3 shadow-md border border-gray-200 hover:shadow-lg transition-all duration-300">
+    <!-- 极简装饰元素（优化大小和透明度） -->
+    <div class="absolute top-0 right-0 w-16 h-16 bg-gray-50 rounded-full -mr-8 -mt-8 opacity-70"></div>
+    <div class="absolute bottom-0 left-0 w-12 h-12 bg-gray-100 rounded-full -ml-6 -mb-6 opacity-50"></div>
+    
+    <!-- 标题（增加底部分割线） -->
+    <div class="flex items-center justify-between mb-3 relative z-10 pb-2 border-b border-gray-100">
+      <div class="flex items-center gap-2">
+        <i class="fa fa-rocket text-gray-800 text-lg transition-transform hover:rotate-12 duration-300"></i>
+        <h3 class="text-sm font-bold text-gray-800 tracking-wide">新币担保交易 · 安全护航</h3>
+      </div>
+      <span class="text-[10px] text-gray-700 bg-gray-100 px-2 py-1 rounded-full hover:bg-gray-200 transition-colors">滑动查看⇨</span>
+    </div>
+
+    <!-- 横向滑动容器 -->
+    <div class="overflow-x-auto pb-2 scrollbar-hide relative z-10">
+      <div class="flex gap-4 min-w-max">
+        <!-- 步骤1（增加hover动效） -->
+        <div class="flex flex-col items-center text-center w-[100px] p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+          <div class="w-7 h-7 rounded-full bg-gray-800 text-white text-xs flex items-center justify-center font-bold mb-2 shadow-sm hover:shadow-md transition-shadow">1</div>
+          <i class="fa fa-file-text-o text-gray-800 text-base mb-1"></i>
+          <h4 class="text-xs font-medium text-gray-800">联系新币客服</h4>
+          <p class="text-[9px] text-gray-500 mt-0.5">拉专群上押</p>
+        </div>
+
+        <!-- 步骤连接线（优化图标大小） -->
+        <div class="flex items-center">
+          <i class="fa fa-long-arrow-right text-gray-300 text-xs"></i>
+        </div>
+
+        <!-- 步骤2 -->
+        <div class="flex flex-col items-center text-center w-[100px] p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+          <div class="w-7 h-7 rounded-full bg-gray-800 text-white text-xs flex items-center justify-center font-bold mb-2 shadow-sm hover:shadow-md transition-shadow">2</div>
+          <i class="fa fa-lock text-gray-800 text-base mb-1"></i>
+          <h4 class="text-xs font-medium text-gray-800">押金托管冻结</h4>
+          <p class="text-[9px] text-gray-500 mt-0.5">法币存入托管</p>
+        </div>
+
+        <!-- 步骤连接线 -->
+        <div class="flex items-center">
+          <i class="fa fa-long-arrow-right text-gray-300 text-xs"></i>
+        </div>
+
+        <!-- 步骤3 -->
+        <div class="flex flex-col items-center text-center w-[100px] p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+          <div class="w-7 h-7 rounded-full bg-gray-800 text-white text-xs flex items-center justify-center font-bold mb-2 shadow-sm hover:shadow-md transition-shadow">3</div>
+          <i class="fa fa-exchange text-gray-800 text-base mb-1"></i>
+          <h4 class="text-xs font-medium text-gray-800">提单平台充值</h4>
+          <p class="text-[9px] text-gray-500 mt-0.5">到账后用户结算</p>
+        </div>
+
+        <!-- 步骤连接线 -->
+        <div class="flex items-center">
+          <i class="fa fa-long-arrow-right text-gray-300 text-xs"></i>
+        </div>
+
+        <!-- 步骤4 -->
+        <div class="flex flex-col items-center text-center w-[100px] p-2 rounded-lg hover:bg-gray-50 transition-colors duration-200">
+          <div class="w-7 h-7 rounded-full bg-gray-800 text-white text-xs flex items-center justify-center font-bold mb-2 shadow-sm hover:shadow-md transition-shadow">4</div>
+          <i class="fa fa-check-circle text-gray-800 text-base mb-1"></i>
+          <h4 class="text-xs font-medium text-gray-800">交易完成退押</h4>
+          <p class="text-[9px] text-gray-500 mt-0.5">核验后解冻资金</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- 新币交易保障提示（增加圆角和阴影） -->
+    <div class="mt-3 p-2 bg-gray-100 rounded-lg text-center relative z-10 shadow-sm">
+      <p class="text-[9px] text-gray-700 flex items-center justify-center gap-1">
+        <i class="fa fa-shield"></i> 
+        <span>详细联系规则联系新币客服@xbkf</span>
+      </p>
+    </div>
+  </div>
+</div>
+
+<!-- 隐藏滚动条样式 -->
+<style>
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+</style>
+
+
+
+
+
+
+
     <!-- 底部tab栏 -->
     <div class="bottom-tab">
         <a href="index.html" class="tab-item active">
@@ -637,11 +669,11 @@
         const menuBtn = document.getElementById('menuBtn');
         const mobileMenu = document.getElementById('mobileMenu');
 
-        menuBtn.addEventListener('click', () => {
-            mobileMenu.classList.toggle('hidden');
-            const spans = menuBtn.querySelectorAll('span');
-            spans.forEach((span, index) => {
-                if (mobileMenu.classList.contains('hidden')) {
+        menuBtn?.addEventListener('click', () => {
+            mobileMenu?.classList.toggle('hidden');
+            const spans = menuBtn?.querySelectorAll('span');
+            spans?.forEach((span, index) => {
+                if (mobileMenu?.classList.contains('hidden')) {
                     span.style.transform = '';
                     span.style.opacity = '1';
                 } else {
@@ -667,10 +699,10 @@
                         top: targetElement.offsetTop - 20,
                         behavior: 'smooth'
                     });
-                    if (!mobileMenu.classList.contains('hidden')) {
+                    if (mobileMenu && !mobileMenu.classList.contains('hidden')) {
                         mobileMenu.classList.add('hidden');
-                        const spans = menuBtn.querySelectorAll('span');
-                        spans.forEach((span, index) => {
+                        const spans = menuBtn?.querySelectorAll('span');
+                        spans?.forEach((span, index) => {
                             span.style.transform = '';
                             span.style.opacity = '1';
                         });
@@ -686,6 +718,96 @@
             });
             faqItem.classList.toggle('active');
         }
+
+        // ========== 公告无缝滚动核心JS - 优化重置逻辑 ==========
+        const noticeDataPool = [
+            { id: 1, title: "【通知】燃气水费正常接单，电费话费暂停", time: "2026-01-15", type: "service" },
+            { id: 2, title: "USDT价格实时更新，点击下方彦祖之家查看", time: "2026-01-10", type: "fee" },
+            { id: 3, title: "春节期间充值速度可能会慢，未到账随时可退", time: "2026-01-05", type: "holiday" },
+            { id: 4, title: "【提示】注意防骗 客服@o4272 @svip669966 ", time: "2026-01-01", type: "security" },
+            { id: 5, title: "任何私聊都不能信，防骗指南 新人必看", time: "2025-12-28", type: "activity" }
+        ];
+
+        let noticeScrollSpeed = 0.6;
+        let noticeScrollPosition = 0;
+        let noticeHeight = 0;
+        let noticeMarqueeTimer = null;
+        let isNoticePaused = false;
+
+        function generateNoticeHtml(notice) {
+            const typeConfig = {
+                service: { icon: "fa-server", color: "text-blue-500" },
+                fee: { icon: "fa-calculator", color: "text-purple-500" },
+                holiday: { icon: "fa-calendar", color: "text-red-500" },
+                security: { icon: "fa-shield", color: "text-green-500" },
+                activity: { icon: "fa-gift", color: "text-yellow-500" }
+            };
+            const config = typeConfig[notice.type] || typeConfig.service;
+
+            return `
+                <div class="notice-item p-3 bg-white/80 rounded-xl flex items-center justify-between cursor-pointer hover:bg-white transition-colors" onclick="viewNoticeDetail(${notice.id})">
+                    <div class="flex items-center gap-3">
+                        <i class="fa ${config.icon} ${config.color}"></i>
+                        <div class="flex-1 min-w-0">
+                            <p class="text-sm font-medium text-gray-700 truncate">${notice.title}</p>
+                            <p class="text-xs text-gray-400 mt-1">${notice.time}</p>
+                        </div>
+                    </div>
+                    <i class="fa fa-angle-right text-gray-300"></i>
+                </div>
+            `;
+        }
+
+        function initNoticeList() {
+            const noticeList = document.getElementById('noticeList');
+            let html = '';
+            noticeDataPool.forEach(notice => {
+                html += generateNoticeHtml(notice);
+            });
+            // 双列表拼接，实现无缝循环的基础
+            noticeList.innerHTML = html + html;
+            noticeHeight = document.querySelector('.notice-item')?.offsetHeight + 12 || 0;
+            startNoticeMarquee();
+        }
+
+        function startNoticeMarquee() {
+            if (isNoticePaused) return;
+            if (noticeMarqueeTimer) cancelAnimationFrame(noticeMarqueeTimer);
+            
+            function scroll() {
+                if (!isNoticePaused) {
+                    noticeScrollPosition += noticeScrollSpeed;
+                    // 关键优化：滚动距离等于单列表高度时，瞬间重置位置，无感知衔接
+                    if (noticeScrollPosition >= noticeHeight * noticeDataPool.length) {
+                        noticeScrollPosition = 0;
+                    }
+                    document.getElementById('noticeList').style.transform = `translateY(-${noticeScrollPosition}px)`;
+                }
+                noticeMarqueeTimer = requestAnimationFrame(scroll);
+            }
+            noticeMarqueeTimer = requestAnimationFrame(scroll);
+        }
+
+        function toggleNoticeMarquee() {
+            isNoticePaused = !isNoticePaused;
+            const btn = document.querySelector('[onclick="toggleNoticeMarquee()"]');
+            if (isNoticePaused) {
+                btn.innerHTML = '<i class="fa fa-play mr-1"></i> 播放';
+            } else {
+                btn.innerHTML = '<i class="fa fa-pause mr-1"></i> 暂停';
+                startNoticeMarquee();
+            }
+        }
+
+        function viewNoticeDetail(noticeId) {
+            const notice = noticeDataPool.find(item => item.id === noticeId);
+            if (notice) {
+                alert(`【${notice.title}】\n\n详情内容可在此处扩展，支持富文本、图片等格式`);
+            }
+        }
+
+        window.addEventListener('resize', initNoticeList);
+        window.addEventListener('load', initNoticeList);
     </script>
 </body>
 </html>
