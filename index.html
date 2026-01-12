@@ -641,7 +641,119 @@
 
 
 
+<!-- 精简美化弹窗组件 -->
+<div id="universalModal" class="fixed inset-0 bg-gray-900/80 backdrop-blur-sm flex items-center justify-center z-50 opacity-0 pointer-events-none transition-opacity duration-500">
+    <!-- 弹窗内容 -->
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-2xl w-full max-w-md mx-4 overflow-hidden transform transition-all duration-500 scale-90 opacity-0" id="modalContent">
+        <!-- 顶部装饰光效 -->
+        <div class="absolute top-0 left-0 w-full h-1.5 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500"></div>
+        <div class="absolute top-0 right-0 w-32 h-32 bg-blue-500/10 rounded-full -translate-y-1/2 translate-x-1/2 blur-2xl"></div>
+        
+        <!-- 弹窗头部 -->
+        <div class="p-6 text-center border-b border-gray-100 dark:border-gray-700">
+            <div class="w-12 h-12 rounded-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xl mx-auto mb-4">
+                <i class="fa fa-shield"></i>
+            </div>
+            <h3 class="text-xl font-bold text-gray-800 dark:text-white">
+                欢迎各位彦祖回家
+            </h3>
+        </div>
+        
+        <!-- 弹窗主体 -->
+        <div class="p-6">
+            <div class="space-y-4">
+                <div class="flex items-start">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
+                        <i class="fa fa-check text-blue-500 text-xs"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">
+                        本平台提供8折生活缴费服务
+                    </p>
+                </div>
+                
+                <div class="flex items-start">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
+                        <i class="fa fa-check text-blue-500 text-xs"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">
+                        支持欧易/币安/火币0手续费交易
+                    </p>
+                </div>
+                
+                <div class="flex items-start">
+                    <div class="w-6 h-6 rounded-full bg-blue-100 dark:bg-blue-900/30 flex items-center justify-center mt-0.5 mr-3 flex-shrink-0">
+                        <i class="fa fa-check text-blue-500 text-xs"></i>
+                    </div>
+                    <p class="text-gray-600 dark:text-gray-300 text-sm">
+                        服务有价 真诚无价 欢迎各位骚扰
+                    </p>
+                </div>
+            </div>
+        </div>
+        
+        <!-- 弹窗底部 -->
+        <div class="p-6 border-t border-gray-100 dark:border-gray-700">
+            <button onclick="closeUniversalModal()" class="w-full px-5 py-3.5 bg-gradient-to-r from-blue-500 to-purple-600 text-white rounded-lg hover:shadow-lg transition-all duration-300 transform hover:-translate-y-0.5 active:translate-y-0 font-medium">
+                朕已阅
+            </button>
+        </div>
+    </div>
+</div>
 
+<script>
+    // 页面加载1秒后自动弹窗
+    window.onload = function() {
+        setTimeout(openUniversalModal, 1000); // 1秒延迟
+    }
+
+    // 打开弹窗 - 禁止页面滚动
+    function openUniversalModal() {
+        const modal = document.getElementById('universalModal');
+        const modalContent = document.getElementById('modalContent');
+        
+        // 禁止页面滚动
+        document.body.style.overflow = 'hidden';
+        
+        // 显示背景并启用交互
+        modal.classList.remove('opacity-0', 'pointer-events-none');
+        
+        // 触发弹窗动画
+        setTimeout(() => {
+            modalContent.classList.remove('scale-90', 'opacity-0');
+            modalContent.classList.add('scale-100', 'opacity-100');
+        }, 50);
+    }
+    
+    // 关闭弹窗 - 恢复页面滚动
+    function closeUniversalModal() {
+        const modal = document.getElementById('universalModal');
+        const modalContent = document.getElementById('modalContent');
+        
+        // 恢复页面滚动
+        document.body.style.overflow = '';
+        
+        // 触发关闭动画
+        modalContent.classList.remove('scale-100', 'opacity-100');
+        modalContent.classList.add('scale-90', 'opacity-0');
+        
+        // 隐藏背景
+        setTimeout(() => {
+            modal.classList.add('opacity-0', 'pointer-events-none');
+        }, 300);
+    }
+</script>
+
+<style>
+    .transition-opacity {
+        transition: opacity 0.3s ease;
+    }
+    .shadow-2xl {
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    body {
+        transition: overflow 0.3s ease;
+    }
+</style>
 
 
     <!-- 底部tab栏 -->
