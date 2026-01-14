@@ -74,6 +74,7 @@
             }
             .content-fade-in {
                 animation: fadeIn 0.5s ease forwards;
+                opacity: 0;
             }
             @keyframes fadeIn {
                 from { opacity: 0; transform: translateY(10px); }
@@ -231,6 +232,8 @@
 </head>
 <body class="font-sans">
     <div class="container mx-auto px-4 py-6 max-w-4xl">
+        <!-- 复制成功提示 -->
+        <div class="copy-toast" id="copyToast"></div>
         
         <!-- 通知公告栏 -->
         <div class="notice-wrap rounded-xl p-4 mb-6 content-fade-in">
@@ -371,7 +374,7 @@
 
         <!-- 下单按钮 -->
         <button id="orderBtn" class="block w-full py-3 bg-gradient-to-r from-primary to-techCyan text-white rounded-2xl font-medium shadow-lg hover:opacity-95 transition-all transform hover:-translate-y-0.5 mb-6 text-center content-fade-in" onclick="openOrderModal()">
-            <i class="fa fa-shopping-cart mr-2"></i>联系彦祖下单
+            <i class="fa fa-shopping-cart mr-2"></i>联系客服下单
         </button>
 
         <!-- 常见问题 -->
@@ -518,8 +521,8 @@
                     <div class="w-16 h-16 rounded-full bg-primary/10 flex items-center justify-center text-primary text-3xl mx-auto mb-4">
                         <i class="fa fa-shopping-cart"></i>
                     </div>
-                    <h3 class="text-xl font-bold text-gray-800">转账地址已复制</h3>
-                    <p class="text-gray-500 text-sm mt-1">欧易/币安/火币/支持0手续费转账</p>
+                    <h3 class="text-xl font-bold text-gray-800">转账地址UID已复制</h3>
+                    <p class="text-gray-500 text-sm mt-1">通过欧易/币安/火币/UID转账 支持0手续费</p>
                 </div>
                 <div class="p-6">
                     <div class="order-info-item">
@@ -725,14 +728,14 @@
                 title: "话费充值",
                 icon: "fa-mobile text-green-500",
                 img: "https://youke3.picui.cn/s1/2026/01/05/695bc7b663a00.jpeg",
-                desc: "三网通用（移动/联通/电信），1000元起充，72小时内到账",
+                desc: "三网通用（移动/联通/电信），72小时内到账。私聊客服 @huafeiXL_bot",
                 tags: [
                     {text: "移动支持", color: "green"},
                     {text: "联通支持", color: "green"},
                     {text: "电信支持", color: "green"},
                     {text: "72小时到账", color: "purple"}
                 ],
-                status: {text: "暂停接单", bg: "bg-green-500"}
+                status: {text: "正常接单", bg: "bg-green-500"}
             }
         };
 
@@ -803,7 +806,25 @@
             }
         }
 
-      
+        // 复制文本函数 - 修复核心缺失功能
+        function copyText(text) {
+            if (!navigator.clipboard) {
+                const input = document.createElement('input');
+                input.value = text;
+                document.body.appendChild(input);
+                input.select();
+                document.execCommand('copy');
+                document.body.removeChild(input);
+                showToast('复制成功');
+                return;
+            }
+            navigator.clipboard.writeText(text).then(() => {
+                showToast('复制成功');
+            }).catch(err => {
+                alert('复制失败，请手动记录：' + text);
+            });
+        }
+
         // 显示提示框
         function showToast(text) {
             const toast = document.getElementById('copyToast');
