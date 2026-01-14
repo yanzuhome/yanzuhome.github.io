@@ -803,25 +803,7 @@
             }
         }
 
-        // 复制文本
-        function copyText(text) {
-            if (!navigator.clipboard) {
-                const input = document.createElement('input');
-                input.value = text;
-                document.body.appendChild(input);
-                input.select();
-                document.execCommand('copy');
-                document.body.removeChild(input);
-                showToast('复制成功');
-                return;
-            }
-            navigator.clipboard.writeText(text).then(() => {
-                showToast('复制成功');
-            }).catch(err => {
-                alert('复制失败，请手动记录：' + text);
-            });
-        }
-
+      
         // 显示提示框
         function showToast(text) {
             const toast = document.getElementById('copyToast');
